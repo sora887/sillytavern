@@ -1,0 +1,102 @@
+---
+name: sillytavern-database-rolecards
+description: >-
+  Design and validate structured in-card data models for SillyTavern rolecards,
+  including table schemas, stable record keys, MVU message-floor storage, field
+  bindings, deterministic migrations, and status-bar or control-center consumers.
+  Use when a rolecard behaves like a small database application or needs schema and
+  migration fixtures across normal multi-floor conversations. Do not introduce an
+  external SQL service or claim same-floor compatibility without real-host evidence.
+---
+
+# SillyTavern Database Rolecards
+
+For source-backed novel/work/fan-creation libraries, web/image references and Markdown/JSONL/SQLite research exports, use `$build-work-library`. This skill owns the in-card MVU/message-floor model and its consumers.
+
+<!-- tw-guidance-entry:begin -->
+## Shared communication
+
+Apply [TW plain-language and guidance rules](../consult-tavernweave-library/references/communication-and-guidance.md): explain terms on first use, keep the user-selected 新人/入门/熟练/老手 level, and still explain needed changes and bugs at every level. Soul and prose modes never disable this baseline.
+<!-- tw-guidance-entry:end -->
+
+<!-- tw-plugin-runtime-entry:begin -->
+## Plugin runtime
+
+When this Skill runs through a plugin, cloud host, or remote machine, read [the plugin execution contract](../consult-tavernweave-library/references/plugin-runtime.md) at entry and apply its host, tool, and persistence checks before host-specific commands. Keep this Skill's scope, authorization, and acceptance gates.
+<!-- tw-plugin-runtime-entry:end -->
+
+Before schema or migration writes, use `$consult-tavernweave-library` with the `sillytavern-database-rolecards` route and load A0, C4, and C7. C8 is returned only with explicit experimental opt-in and remains blocked from mature claims until real-host acceptance.
+
+Treat structured rolecard state as versioned application data. Keep schema,
+migration, storage scope, writers, and UI bindings machine-checkable.
+
+## Fix the supported storage route
+
+First-batch support is limited to normal multi-floor state using message-floor or MVU
+data. Mark same-floor compatibility as `DBR-C8-UNVERIFIED`; do not add a fallback that
+silently changes scope.
+
+Read [rolecard-data-model.md](references/rolecard-data-model.md) before defining tables
+or migrations. Read [floor-and-ui-binding.md](references/floor-and-ui-binding.md)
+before connecting a field to a script, prompt, status bar, or control center.
+
+For worldbook consumers, use [target and state completeness](references/worldbook-target-state-contract.md)
+to trace typed aliases, stable targets and initialization sentinels through the existing
+field ledger, including the scopes used by writers, readers and consumers. It does
+not introduce a second schema.
+
+When exact runtime calls matter, verify `getVariables`, `updateVariablesWith`,
+`Mvu.getMvuData`, MVU events, and message events with
+`$sillytavern-api-reference`. Prefer updater functions and event-driven refresh over
+replacing an entire variable object.
+
+## Validate the model
+
+```text
+node <skill-root>/scripts/validate-rolecard-schema.mjs model.json
+```
+
+Require a stable model ID and version, a `stat_data` storage root, `multi-floor`
+strategy, explicit tables, primary keys, typed fields, valid defaults, and unique
+identifiers. Follow the shared [variable design contract](../tavern-card-builder/references/variable-systems.md): empty collections still need complete future element/child shapes. The local model supports recursive `items`, fixed `properties`, and typed `additionalProperties`; it is a bounded interchange format, not a substitute for the actual runtime Schema. Reject same-floor strategy in this release.
+
+Legacy shallow models remain readable with `--allow-shallow` for inventory only. Their report has `structureComplete: false` and unresolved paths; this mode cannot close schema or binding acceptance. Normal validation rejects missing collection shapes.
+
+## Run migration fixtures
+
+```text
+node <skill-root>/scripts/run-database-migrations.mjs --migration migration.json --input before.json --expected after.json
+```
+
+Require deterministic output and idempotence. Preserve unknown records and fields.
+Reject destructive operations unless the migration declares data loss and the caller
+passes `--allow-data-loss`. Do not write migrated data without `--write` and `--out`.
+
+## Check every consumer
+
+```text
+node <skill-root>/scripts/check-field-bindings.mjs --schema model.json --bindings bindings.json
+```
+
+Every binding must reference a declared table and field, name its reader or writer,
+identify the UI or prompt surface, and state refresh events. Enforce one writer owner per field and write phase; multiple entry points of the same owner are allowed. Initialization and migration require explicit conditions and must finish before runtime writing starts. Static declarations do not prove that these conditions hold in the host. Route UI implementation
+to `$sillytavern-embedded-ui` and packaging to `$sillytavern-card-pipeline`.
+
+## Keep runtime acceptance open
+
+Static checks cannot prove new-chat initialization, edit, swipe, chat switch, reload,
+or persistence behavior. Require a real-SillyTavern matrix for those cases before
+claiming runtime compatibility. Keep C8 excluded until that matrix passes.
+
+## Report
+
+State the model version, storage route, table and binding counts, migration result,
+preserved unknown data, destructive-operation decision, and pending host cases.
+
+## Resources
+
+- `scripts/validate-rolecard-schema.mjs`: validate the model contract.
+- `scripts/run-database-migrations.mjs`: apply deterministic migration fixtures.
+- `scripts/check-field-bindings.mjs`: verify table/field consumers.
+- `references/rolecard-data-model.md`: schema and migration format.
+- `references/floor-and-ui-binding.md`: MVU/message-floor and UI lifecycle contract.

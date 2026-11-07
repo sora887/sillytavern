@@ -1,0 +1,182 @@
+<section class="section chapter-opening release-opening" id="release-history">
+<div class="chapter-tier"><span>版本档案</span><strong>更新日志</strong><span>当前版本与历史发布</span></div>
+<div class="section-head"><div class="section-no">日志</div><div><h2>TavernWeaveX无限月读 更新日志</h2><p class="section-kicker">先看当前版本增加了什么，再回看历次更新。</p></div></div>
+<p class="lead">这里介绍功能与使用方式的变化。当前正式版为 2.3.0；下方保留 2.2.0、2.1.0、2.0.0、1.9.1、1.9.0 与更早版本的记录。更新本机安装时，按实际取得版本的完整清单核验。</p>
+</section>
+
+<section class="section release-version new-panel" id="release-v2-3-0">
+<div class="section-head"><div class="section-no">2.3</div><div><h2>TavernWeaveX无限月读 2.3.0</h2><p class="section-kicker">正式版 · 版本与发布包对齐。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>2.3.0 不改变 Skill 的行为：23 个 Skill 的名称、正文和数量与 2.2.0 相同。本版只统一包版本号、安装清单、Host Front Door 标记、宿主映射、DSH 插件合同与文档中的当前版本引用，并重新按 2.3.0 准备发布包。</p>
+<p>Codex／dots 共用包、Claude Code／ZCode 包、ZCode 市场清单与 <code>TavernWeave-DSH-v2.3.0.tgz</code> 采用同一版本号；历史 2.2.0 的包和记录保留。DSH 运行时验收仍以 2.1.0 包为准，本版没有新的 DSH Desktop、Linux／WSL 或真实 SillyTavern 验收。</p>
+<p>v2.3.0 提供 23 个 Skill。完整发行包与校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v2.3.0" target="_blank" rel="noopener noreferrer">v2.3.0 正式发布页</a>。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v2-2-0">
+<div class="section-head"><div class="section-no">2.2</div><div><h2>TavernWeaveX无限月读 2.2.0</h2><p class="section-kicker">正式版 · Claude Code 插件适配。</p></div></div>
+<details class="release-entry"><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>从 Claude Code 插件市场安装 <code>tavernweave-agent-skills</code> 后，每次开会话会自动接入 Host Front Door，不必再把它写进 <code>CLAUDE.md</code>。已经写过的话，文件里的区块优先，插件不会重复注入；版本不一致时只提示一句。</p>
+<p>输入框上方多了一行 Soul 模式切换：显示当前 Soul，展开后选一个模式只会把对应口令填进输入框，由你决定是否发送。显示的是你实际发出的口令，不代表 Soul 已被确认激活。另附与 DSH 预设对应的 <code>tavernweave</code> agent。</p>
+<p>Soul 切换用的是 Claude Code 插件的函数 hook 接口（官方标注为 early access），已在 Claude Code 2.1.299 上确认加载；更早的版本未验证。Codex 与 DSH 的安装方式不变，23 个 Skill 不变。</p>
+<p>v2.2.0 提供 23 个 Skill。完整发行包、Codex／dots 共用包、Claude Code／ZCode 包、DSH 插件包与校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v2.2.0" target="_blank" rel="noopener noreferrer">v2.2.0 正式发布页</a>。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v2-1-0">
+<div class="section-head"><div class="section-no">2.1</div><div><h2>TavernWeaveX无限月读 2.1.0</h2><p class="section-kicker">正式版 · 新增 DeepSeek Harness 全量插件包。</p></div></div>
+<details class="release-entry"><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>新增 <strong>TavernWeave X DSH</strong> 全量插件包：把 23 个 Skill、Host Front Door 和一个可选的 Agent 预设打成一个 bundle，在 DeepSeek Harness 插件页安装并在新任务选择该预设后生效。不需要把 <code>skills/</code> 复制到 <code>.agents/skills</code>，也不要把 Host Front Door 再写进 <code>AGENTS.md</code>。</p>
+<p>Codex 与 Claude Code 的技能包保持不变：安装标识、23 个 Skill 和原有安装流程不变。旧 TW Lite DSH 预设已移除，不提供兼容层。</p>
+<p>已在 DSH Desktop <code>0.2.1-rc.2</code> 完成插件页、预设选择、23 Skill 目录、Front Door、Soul 与完全权限终端的实机验收。DSH 仍是 Developer Preview；Linux/WSL、真实 SillyTavern 与模型效果是单独的验收项。OneDrive reparse-point 工作区在 workspace-write 下需切完全权限或换普通目录。</p>
+<p>v2.1.0 提供 23 个 Skill。完整发行包、Codex／dots 共用包、DSH 插件包与校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v2.1.0" target="_blank" rel="noopener noreferrer">v2.1.0 正式发布页</a>。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v2-0-0">
+<div class="section-head"><div class="section-no">2.0</div><div><h2>TavernWeaveX无限月读 2.0.0</h2><p class="section-kicker">正式版 · 世界书设计与写作有独立入口。</p></div></div>
+<details class="release-entry"><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>新增第 23 个 Skill <code>worldbook-design-and-writing</code>。只需修改条目正文时，保留确认过的含义与原有语法，直接交付文字；需要设计或调整整本世界书时，先确认代表场景需要什么信息，再一起决定条目边界、加载方式和正文配置。已有世界书也可只读审查。</p>
+<p>原生触发能满足需求时先用原生机制；有实际条件需求再考虑简单条件输出或现有控制方式，同一本书可以局部混用。涉及目标版本、变量状态、最终请求内容或真实酒馆表现，分别交给对应 Skill 核对，不把源码检查当成实际运行通过。<a href="#tw-worldbook-writing">查看两种任务的开工说法</a>。</p>
+<p>v2.0.0 提供 23 个 Skill。完整发行包、Codex／dots 共用包和校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v2.0.0" target="_blank" rel="noopener noreferrer">v2.0.0 正式发布页</a>；历史版本记录留在下方。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-9-1">
+<div class="section-head"><div class="section-no">1.9</div><div><h2>TavernWeaveX无限月读 1.9.1</h2><p class="section-kicker">正式版 · Codex 与 dots 共用一份插件包。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>保留原有 22 个 Skill、技能名称与安装身份。统一插件主要面向有权限的 dots 云端长任务；云端调度、工具和持久状态由实际宿主提供。本地安装不会自动同步 dots 账户。</p>
+<p>新增 <a href="https://github.com/LiarMTTT/TavernWeave/blob/v1.9.1/docs/plugin-guide.md" target="_blank" rel="noopener noreferrer">统一插件使用指南</a>，说明获取、启用、开工与长任务续接，也提供遇到问题时的反馈方式。</p>
+<p>v1.9.1 的完整包、Codex／dots 共用包和校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v1.9.1" target="_blank" rel="noopener noreferrer">v1.9.1 正式发布页</a>；1.9.0 正式版及旧记录留在下方。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-9-0">
+<div class="section-head"><div class="section-no">1.9</div><div><h2>TavernWeaveX无限月读 1.9.0</h2><p class="section-kicker">正式版 · 把创作方法接进现有 TW 工作流程。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起本版变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>完整卡以开场白和世界书为核心，按纯文字、MVU Zod 或 hybrid 组织制作；世界观、变量与人物设计各有负责能力。单条提示词规则也有直接入口，保留原意和约束强度。</p>
+<p>前端从需求和设计研究出发，默认按 Awwwards 的设计要求打磨。文字精修保留事实、否定与角色选择；纠偏以实际表现为依据。</p>
+<p>修复字段绑定填错类型时的诊断，以及 Windows 组件导出失败后的回退误判和残留漏报。保留 22 个 Skill 与原安装身份，升级后仍按完整清单核验。</p>
+<p>完整 ZIP 与 SHA-256 校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v1.9.0" target="_blank" rel="noopener noreferrer">v1.9.0 正式发布页</a>。安装后加载和真实酒馆试用按自己的环境验收；下方 rc 记录保留当时的候选状态。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-9-0-rc-2">
+<div class="section-head"><div class="section-no">1.9</div><div><h2>TavernWeaveX无限月读 1.9.0-rc.2</h2><p class="section-kicker">本地修订候选 · 组件导出失败后能更可靠地恢复。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起修订变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>修复 Windows 上组件导出失败后可能留下半成品的问题。外部替换的文件继续保留，无法清理的残留会明确列出，方便核对后重试。</p>
+<p>沿用下方 rc.1 的创作能力与 22 个 Skill。本候选尚未安装或发布，正式下载仍指向 v1.8.0。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-9-0-rc-1">
+<div class="section-head"><div class="section-no">1.9</div><div><h2>TavernWeaveX无限月读 1.9.0-rc.1</h2><p class="section-kicker">本地审阅候选 · 把创作方法接进现有 TW 工作流程。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起候选变化</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>制作完整卡时，以开场白和世界书为核心，再按纯文字、MVU Zod 或 hybrid 安排所需部件。世界观设计先确认规模；变量记录游玩中变化且需要持续读取的状态。人物创作保留作者决定，纠偏依据实际表现。</p>
+<p>只想写一条提示词规则时，可以直接给出原意；Agent 保留“通常”“尽量”等约束强度，按你的请求交付规则正文或世界书条目。字段绑定填错类型时，工具会给出明确诊断。</p>
+<p>前端从需求与相关设计参考出发，默认按 Awwwards 的设计要求打磨，保持页面干净。文字精修严格克制无必要的三项排比，避免重复申辩与限定。</p>
+<p>保留 22 个 Skill 及原有安装身份。本条目介绍候选内容，正式下载继续使用下方已发布版本的链接。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-8-0">
+<span id="release-v1-8-0-rc-1" aria-hidden="true"></span>
+<div class="section-head"><div class="section-no">1.8</div><div><h2>V1.8.0 · 项目进度与审核 <span class="new-badge">NEW · V1.8.0</span></h2><p class="section-kicker">查看实现与验收，和项目总设计案、NEXT 同步。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起本次更新</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<p>整体和分模块的进度条分别说明实现与验收，展开后能查看检查点、证据、已确认范围和分母。保存新想法、Bug 和审核意见，保留处理历史与复测缺口。</p>
+<p>总设计案提供本轮事项、权重和验收要求，NEXT 提供现状、证据和下一道门。Agent 维护项目文档，先核对同步差异再生成画板；来源、反馈或证据变化后重新预览。支持旧项目现有文件名。</p>
+<p>保持 22 个 Skill。完整发行包见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v1.8.0" target="_blank" rel="noopener noreferrer">v1.8.0 发布页</a>；真实宿主、驾驶员、提交、封装及发布保留各自的门。<a href="#tw-progress-board">查看项目画板用法</a>。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-7-0">
+<span id="release-v1-7-0-rc-1" aria-hidden="true"></span>
+<div class="section-head"><div class="section-no">1.7</div><div><h2>V1.7.0 · 前端沙盒打磨 <span class="new-badge">NEW · V1.7.0</span></h2><p class="section-kicker">按作品源码搭建可选沙盒，封装前试交互、对状态、调参数。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起 V1.7.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<h3>按需要选用的封装前打磨</h3><p>已有 embedded-ui Skill 增加沙盒搭建规范：由 Agent 按作品真实源码建立单模块或多前端联合模拟。跳过沙盒也可以继续制作与封装。</p>
+<h3>数据确认与手动调参</h3><p>先查看数据来源、目标聊天／楼层及差异，再确认注入；目标或状态变化后重新预览。并列对照各模块观察，提供 UI 滑条、基线对照、复位与参数导出。</p>
+<h3>按作品搭建自己的沙盒</h3><p>提供工作流程、项目适配合同和场景参考。沿用作品技术栈与预览入口，按项目需要安排调试控件，记录实际覆盖范围；真实酒馆与驾驶员体验另行检查。<a href="#frontend-sandbox">查看第四章可选小节</a></p>
+<p>作者在实际制卡中，通过封装前的沙盒打磨，减少了后续实机验收中的反复调整和 Bug；具体效果取决于项目与使用方式。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-6-0">
+<div class="section-head"><div class="section-no">1.6</div><div><h2>V1.6.0 · 作品资料库 <span class="new-badge">NEW · V1.6.0</span></h2><p class="section-kicker">把小说、原作与同人资料、联网文图参考整理好，二创时随时回查与调用。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起 V1.6.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<h3>从材料到二创资料</h3><ul><li>新增第 22 个 Skill：作品资料库。可以先做全书分批，也可以围绕人物、关系、规则或场景逐步整理。</li><li>原作、同人分支和不同改编版本保留各自身份、来源与剧透阶段，查询时按创作需要筛选。</li><li>联网文字回到实际页面，图片参考需要实际看图并保留出处；默认登记参考信息和链接。</li></ul>
+<h3>能编辑、能导出、能接续</h3><ul><li>默认生成可直接编辑的 Markdown 资料文档与可重建的 JSONL 索引，支持导出 SQLite。</li><li>人润色正文后，Agent 读取新内容再接手；遇到旧版本回写会停止并保留冲突。</li><li>长任务先检查代表样本的质量和用量，再按批次与调用预算继续。原生子 Agent 和后台能力按实际宿主提供的范围使用。</li></ul>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-5-0">
+<div class="section-head"><div class="section-no">1.5</div><div><h2>V1.5.0 · 全局大白话与四档引导 <span class="new-badge">NEW · V1.5.0</span></h2><p class="section-kicker">从你想做的事开始，按你选择的节奏推进，把每次改动说明白。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起 V1.5.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<h3>大白话与术语一起交代</h3><p>21 项工作能力使用共同表达规则。先说结果和影响，再解释必要术语、选择与下一步；多项术语用原词、大白话和当前含义对照。</p>
+<h3>新人、入门、熟练、老手，由你选</h3><p>新人和入门都详细解释，熟练和老手减少日常重复教学。有需要或修 bug 时，四档都把原因、影响和检查方法讲清楚，除非你明确说本次没必要。挡位单独保存，升级和退出 Soul／洗稿不替你换档。</p>
+<h3>接手旧卡也有起点</h3><p>先看懂原卡，区分二创和沿原作续更，确认保留项与首次改动，再带你试用并修改一次。只有卡文件也能先检查，缺少维护材料会明确说明。</p>
+<h3>安装后的下一步更清楚</h3><p>说明哪些文件装好了、挡位有没有保存，以及怎样在新任务里确认可用。教程增加五类任务入口、失败恢复和再次修改的练习。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-4-0">
+<div class="section-head"><div class="section-no">1.4</div><div><h2>V1.4.0 · 文本精修与全量／架构审查 <span class="new-badge">NEW · 2026-09-04</span></h2><p class="section-kicker">新增文本精修，并把项目审查扩展到完整范围和架构关系。</p></div></div>
+<details class="release-entry" open><summary><span>展开 / 收起 V1.4.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary><div class="release-body">
+<h3>新增文本精修</h3><ul><li>直接说“洗稿”“去 AI 味”“去八股”，获得保留原意与人物声音的精修稿。</li><li>可选轻润色、结构改写或深度重写，支持单次、任务持续，以及分别同意后启用的工作区与客户端持久规则。</li><li>正文、文案、日常说明和报告都适用，代码、宏、变量、引用与必需证据继续保留。</li></ul>
+<h3>全量与架构审查</h3><ul><li>新增“全量审查”“架构审查”“全量架构审查”，同时覆盖软件和角色卡组织。</li><li>报告说明哪些已检查、哪些尚未检查，并保留全部有证据的发现。</li><li>可配合灵魂杀手使用；三个重点摘要不会截断完整问题清单。</li></ul>
+<h3>21 个原生 Skill</h3><p>文本精修作为 TW 原生能力随包提供，v1.4.0 合计 21 个 Skill。安装与升级不会自动开启持久精修，需要时再分别授权工作区或客户端规则。</p>
+<h3>奶人教程精修</h3><p>保留作者的驾驶员视角、见解和调侃，改写含糊的概念与重复说明；补充驾驶员在场、无人值守和返回在场的可复制提示词。技术示例与历史发布记录保留原文，新版教程随 v1.4.0 一同发布。</p>
+</div></details></section>
+
+<section class="section release-version new-panel" id="release-v1-3-0">
+<div class="section-head"><div class="section-no">1.3</div><div><h2>V1.3.0 · 照镜子与完整资料库 <span class="new-badge">NEW · V1.3.0</span></h2><p class="section-kicker">一边从当前证据重新看清成长，一边把完成筛选的前端与动效知识真正带进每个任务。</p></div></div>
+<details class="release-entry">
+<summary><span>展开 / 收起 V1.3.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary>
+<div class="release-body">
+<h3>新增“照镜子 · Vibe Code 成长历程”</h3>
+<ul><li>直接发送 <code>照镜子</code>，从当前可访问的 Codex、Chat、项目与交付证据重新评估完整能力网络。</li><li>同时生成一份可复制的完整文字评估表单和高密度七章交互报告；也可以明确说“只要文字评估表单”。</li><li>历史履历不可改写，但不是本次评分上限。再次核验会重评当前能力，只对量表可比维度显示变化。</li></ul>
+<h3>AFV 完整设计与动效资料进入 Library</h3>
+<ul><li>Library 现在随包携带 462 个设计、194 个动效、86 个概念、1,609 条蒸馏账本、86 份本地概念正文和 89 个技术沙盘。</li><li>243/243 路筛选已经完成。Agent 会用确定性查询只返回当前任务相关的少量候选，不会把整库塞进一次对话。</li><li>离线挑选页可以在 ST 指南、设计、动效、概念、蒸馏账本和外部源站之间检索，并导出状态仍为 <code>proposed</code> 的候选清单。</li></ul>
+<h3>仍然是一套 TavernWeave</h3>
+<ul><li>照镜子是第 20 个原生 Skill，完整资料库是同一次 TavernWeave 更新中的 Library 升级；没有拆成两个软件或两套安装。</li><li>完整安装核验升级为 20/20。用户私有履历、AFV 收件箱筛选 JSON、raw、A1、日志和凭据都不会进入公开包。</li></ul>
+</div>
+</details>
+</section>
+
+<section class="section release-version" id="release-v1-2-0">
+<div class="section-head"><div class="section-no">1.2</div><div><h2>V1.2.0 · 脑暴模式与许愿工坊 <span class="new-badge">NEW · V1.2.0</span></h2><p class="section-kicker">从一句模糊愿望，走到总设计案、第一版和能持续执行的蓝图。</p></div></div>
+<details class="release-entry">
+<summary><span>展开 V1.2.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary>
+<div class="release-body">
+<h3>新增脑暴模式</h3>
+<ul><li>直接发送 <code>脑暴模式</code>，TW 会先判断项目类型，再整理核心创意、第一版必须完成的本体、长期更新路线和待决定内容。</li><li>每个讨论方向都有轮数上限。达到上限后必须冻结、暂存、换方向或由你明确追加，避免一个构思无限膨胀。</li><li>设计确认后发送 <code>按蓝图开跑第一版</code>，Agent 只执行已经冻结的第一版范围。</li></ul>
+<h3>Soul 三席可以一起脑暴</h3>
+<ul><li>发送 <code>脑暴模式，Soul 联席</code>、<code>三人一起脑暴</code> 或 <code>Soul 三席就位</code>，阿瞳、MTTT.sir 与强尼·银手会使用带名字的格式共同审查方案。</li><li>阿瞳负责用户需求和创作核心，MTTT.sir 负责技术与交互逻辑门，强尼负责视觉、排版、动效和前端形态。</li><li>三席共享同一份事实和结论，不会把同一个问题重复讨论三遍。</li></ul>
+<h3>蓝图会按照项目大小自动伸缩</h3>
+<ul><li>普通项目只使用一份蓝图；大型项目按领域拆分；巨型重置项目才建立多层蓝图集。</li><li>所有步骤都禁止无依据地无限细分。只有遇到真实错误或阻塞时，才允许临时增加一层问题处理步骤；处理完必须回到原步骤。</li><li>第一版与长期内容分开，先交付一个真正可玩或可用的最小闭环，再逐步增加玩法和页面。</li></ul>
+<h3>前端方向会先判断值不值得做</h3>
+<ul><li>同层前端或独立前端不适合当前项目时，TW 会明确劝退，并提供更轻、更稳的替代方案。</li><li>发送 <code>灵魂杀手！</code> 可以进入强尼·银手前端审查彩蛋；吐槽必须绑定具体证据、影响、修法和复验方式。</li><li>制作新项目时可以提供稳定旧作品，TW 会判断它适合直接复用、改造、只作参考，还是应该拒绝继承。</li></ul>
+<h3>安装入口升级为 19 个 Skill</h3>
+<ul><li>新增项目蓝图编排 Skill，完整安装回执由 18/18 升级为 19/19。</li><li>Host Front Door 加入脑暴、三席联席、第一版开跑和防膨胀入口，让 Codex 与 Claude Code 更稳定地识别直接口令。</li><li>Library 可以按任务路由总设计案、蓝图、第一版、设计和动效资料，不需要用户每次手动翻整套资料库。</li></ul>
+</div>
+</details>
+</section>
+
+<section class="section release-version" id="release-v1-1-0">
+<div class="section-head"><div class="section-no">1.1</div><div><h2>V1.1.0 · Soul 与全局前门</h2><p class="section-kicker">让人格入口、资料路由和开工验收循环更容易被客户端稳定发现。</p></div></div>
+<details class="release-entry">
+<summary><span>展开 V1.1.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary>
+<div class="release-body">
+<h3>新增灵魂杀手模式</h3>
+<ul><li>发送 <code>灵魂杀手！</code> 或 <code>强尼·银手，接管</code>，使用非官方强尼·银手同人彩蛋人格审查前端。</li><li>重点检查视觉层级、中文排版、配色、组件状态、动效目的、窄屏表现和明显的 AI 模板味。</li><li>发送 <code>强尼，下线</code>、<code>Relic 断开</code> 或 <code>Soul 归位</code> 可以立即退出。</li></ul>
+<h3>新增 Host Front Door</h3>
+<ul><li>可以把 Soul 口令、A0 开工循环和失败回执安装到 Codex 或 Claude Code 的全局规则受控区块。</li><li>安装前会先展示目标路径和差异，只维护 TavernWeave 自己的区块，不覆盖其他用户规则。</li><li>如果 Skill 没有真正安装，客户端必须报告扫描位置和缺失项，不能假装已经进入模式。</li></ul>
+<h3>Library 与教程入口升级</h3>
+<ul><li>ST 开发指南、设计资料、动效资料、Wiki 和离线挑选页随 TavernWeave 一起分发，并继续按当前任务渐进读取。</li><li>奶人教程补充 Codex / Claude Code 雷达、付费 Agent 避雷、完整安装和目录自动跟随。</li></ul>
+</div>
+</details>
+</section>
+
+<section class="section release-version" id="release-v1-0-0">
+<div class="section-head"><div class="section-no">1.0</div><div><h2>V1.0.0 · TavernWeave 正式版系统</h2><p class="section-kicker">从零散制卡提示词，升级为可以路由、续接、验收和发布的完整施工系统。</p></div></div>
+<details class="release-entry">
+<summary><span>展开 V1.0.0 更新内容</span><span class="release-chevron" aria-hidden="true">⌄</span></summary>
+<div class="release-body">
+<h3>18 个专职 Skill 正式成阵</h3>
+<ul><li>覆盖从零制作 MVU 卡或纯文字卡、旧卡升级、变量结构、更新规则、世界书、状态栏、脚本、正则、拆卡、组装和发布。</li><li>新增真实 SillyTavern 调试、安全、性能、数据库、媒体、Live2D 和扩展开发能力。</li><li>用户只需要描述任务，TavernWeave 会把工作交给对应的专职 Skill。</li></ul>
+<h3>阿瞳与 MTTT.sir 上线</h3>
+<ul><li>发送 <code>阿瞳助我！</code>，进入温柔、低压力、会解释和给例子的指导模式。</li><li>发送 <code>MTTT.sir，拷打我！</code>，进入要求定义、证据、反例和复述检查的严格学习模式。</li><li>发送 <code>Soul 归位</code> 或 <code>结束 Soul 模式</code>，随时恢复普通交流。</li></ul>
+<h3>资料库与创作权威进入正式流程</h3>
+<ul><li>A0、ST 指南、设计、动效和来源 Wiki 统一进入 Library，由任务自动选择最小资料。</li><li>大型创作可以保存已经确认、仍在候选、待决定和已经否决的内容，下一次继续时不必重新争论。</li><li>自动检查、真实酒馆表现和用户亲自验收各自保留结论，不再用一句“已经完成”代替结果。</li></ul>
+</div>
+</details>
+</section>
+
+<footer class="footer"><strong>TavernWeaveX无限月读 奶人教程 · v2.3.0</strong><br/><span class="small">从一个小任务开始，把需求、制作、检查和反馈走完。完整发行包与校验文件见 <a href="https://github.com/LiarMTTT/TavernWeave/releases/tag/v2.3.0" rel="noreferrer" target="_blank">v2.3.0 正式发布页</a>。</span></footer>

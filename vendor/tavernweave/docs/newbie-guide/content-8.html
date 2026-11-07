@@ -1,0 +1,315 @@
+<section class="section chapter-opening" id="chapter-4">
+<div class="chapter-tier"><span>进阶篇</span><strong>从第四章开始</strong><span>真实运行时调试</span></div>
+<div class="section-head"><div class="section-no">Ⅳ</div><div><h2>让 Agent 看见真实酒馆里的运行过程</h2><p class="section-kicker">先记录事件，再定位代码；修复之后，用移除调试设施的产物重新验收。</p></div></div>
+<p class="lead">静态检查可以发现语法、类型或结构问题，构建与自动测试也各有用途。进入真实酒馆后，还需要确认当前加载了哪份产物、事件是否到达、数据写到哪一步。运行记录能把这些过程留给 Agent 分析。</p>
+<div class="cards"><article class="card"><div class="card-icon">真</div><h4>真实 SillyTavern</h4><p class="muted">使用真实卡片，执行出现问题时的点击、聊天切换或生成操作，记录宿主、iframe 和扩展中的表现。</p></article><article class="card"><div class="card-icon">探</div><h4>调试 Probe</h4><p class="muted">酒馆助手的本地调试脚本只采集选定事件、版本、构建标记和有限状态摘要，不接管业务逻辑。</p></article><article class="card"><div class="card-icon">代</div><h4>Agent</h4><p class="muted">Agent 根据具备的工具读取事件流、协助复现并定位问题。不能代你操作的步骤，会说明操作方法和需要保留的证据。</p></article></div>
+<div class="callout good"><strong>这里的 Mock Receiver 是什么</strong>它是教学用的本机调试接收器，接收 Probe 发来的记录。酒馆和事件都来自真实运行实例；“Mock”这个名字不表示另外造了一套假酒馆。</div>
+</section>
+
+<section class="section" id="frontend-sandbox">
+<div class="section-head"><div class="section-no">可选</div><div><h2>封装前，用前端沙盒打磨界面</h2><p class="section-kicker">先在本机看完整维护源码的界面表现，再把新构建放回真实酒馆验收。</p></div></div>
+<p>如果角色卡有状态栏、控制中心、开局页等前端，你可以让 Agent 按作品源码搭建本地前端沙盒：单独看一个模块，或把共享状态与事件的模块放在一起看。TW 提供搭建规范，页面与调试控件沿用作品风格、按实际需要安排。它推荐用于封装前的打磨，但不是必经步骤；选择跳过，就照常继续构建和真实酒馆测试，不记作失败。作者在实际制卡中，通过封装前的沙盒打磨，减少了后续实机验收中的反复调整和 Bug；具体效果取决于项目与使用方式。</p>
+<div class="cards"><article class="card"><h4>先核对源码</h4><p class="muted">沙盒列出实际装载的完整模块清单、源码路径、修订和 SHA-256。项目接入要导入维护中的真实组件，不用仿制页面冒充原组件。</p></article><article class="card"><h4>数据先预览再确认</h4><p class="muted">查看旧值与新值、影响的模块和事件后，再确认或取消。恢复、重置、多步情景也有确认步骤；临时 UI 参数可用滑块即时调整，并与游戏数据分开。</p></article><article class="card"><h4>把证据分层</h4><p class="muted">沙盒能帮助发现界面与组件协作问题；真实 SillyTavern 的 iframe、扩展、消息楼层、模型行为和最终视觉体验，仍要分别检查。</p></article></div>
+<div class="callout good"><strong>和本章的 Mock Receiver 不是一回事</strong>前端沙盒在本机预览组件；下文的 Mock Receiver 是接收真实酒馆 Probe 记录的本机服务。它名字里有“Mock”，记录的酒馆操作仍来自真实 SillyTavern。</div>
+<div class="code-block"><div class="code-label"><span>采用或跳过，由你决定</span><button class="copy-btn" type="button">复制</button></div><pre><code>按我的作品搭建封装前沙盒，沿用项目的源码、技术栈和预览方式。先核对本次范围内的真实源码、全部模块与宿主依赖，推荐单模块或联合模拟。测试数据先展示来源、目标与差异，等我确认后注入；UI 参数可即时预览，保留基线与导出。最后列出未覆盖项和回落实机需要复验的重点。
+
+如果本次不需要：跳过沙盒，按已有制作与封装流程继续。</code></pre></div>
+<p>搭建规范、场景参考和证据边界见<a href="https://github.com/LiarMTTT/TavernWeave/blob/main/docs/frontend-sandbox.md" target="_blank" rel="noopener noreferrer">前端沙盒搭建说明</a>。让 Agent 在项目测试目录里实现，测试场景优先用合成数据；私人作品与原聊天留在项目自己的测试目录。</p>
+</section>
+
+<section class="section" id="runtime-evidence">
+<div class="section-head"><div class="section-no">37</div><div><h2>为什么还要记录真实运行过程</h2><p class="section-kicker">每种检查只能回答对应的问题，报告里要说明依据和范围。</p></div></div>
+<div class="compare"><div class="compare-side"><h4>离线检查能证明</h4><p class="muted">文件存在、语法可解析、构建能完成、HTML 与 CSS 在普通页面中能显示。</p></div><div class="compare-vs">≠</div><div class="compare-side"><h4>运行记录可以帮助确认</h4><p class="muted">配合构建标记、事件检查点与数据复读，确认产物、事件和写入位置。是否经得住刷新与聊天切换，还要实际操作对应路径。</p></div></div>
+<h3>从这些现象判断该查什么</h3>
+<div class="table-wrap"><table><thead><tr><th>现象</th><th>仅看源码时容易误判</th><th>监听后要找的证据</th></tr></thead><tbody><tr><td>改了代码，页面没有变化</td><td>继续修改 CSS 或组件</td><td>构建标记是否更新、目标 iframe 是否重载、当前是否仍在跑旧产物</td></tr><tr><td>点击一次执行两次</td><td>按钮本身有问题</td><td>点击入口、业务处理和写入检查点分别出现了几次</td></tr><tr><td>变量变了，UI 没变</td><td>写入失败</td><td>写入完成事件存在，但重新读取或渲染事件缺失</td></tr><tr><td>切换对话后失效</td><td>功能偶发不稳定</td><td><code>CHAT_CHANGED</code> 后是否重新绑定、是否产生重复实例</td></tr><tr><td>控制台只剩一串连锁报错</td><td>从最后一个空引用开始修</td><td>最早出现的异常、对应事件与当时加载的构建版本</td></tr></tbody></table></div>
+<div class="callout warn"><strong>把修复前的表现留下来</strong>先记录一次可复现的失败，再修改。修完重走同一条路径，才容易判断变化来自哪里；如果只能偶发复现，就把触发条件和已知缺口一并记下。</div>
+</section>
+
+<section class="section" id="agent-mock">
+<div class="section-head"><div class="section-no">38</div><div><h2>Probe、接收器与 Agent，分别做什么</h2><p class="section-kicker">Probe 收集选定事件，Receiver 保存记录，Agent 把记录与操作、源码对照。</p></div></div>
+<div class="flow"><div class="flow-node">真实酒馆操作</div><div class="flow-arrow">→</div><div class="flow-node">酒馆助手 Probe</div><div class="flow-arrow">→</div><div class="flow-node">本机 Mock Receiver</div><div class="flow-arrow">→</div><div class="flow-node">NDJSON 事件流</div><div class="flow-arrow">→</div><div class="flow-node">Agent 定位与回归</div></div>
+<h3>先分清这三层</h3>
+<div class="cards"><article class="card"><h4>Probe：选择证据</h4><p class="muted">订阅酒馆事件并发送“事件名、时间、参数形状、版本、构建标记”。不要上传整段聊天、完整变量表或密钥。</p></article><article class="card"><h4>Receiver：保存记录</h4><p class="muted">只监听 <code>127.0.0.1</code>，校验临时口令，把每条记录追加到本地 NDJSON 文件。</p></article><article class="card"><h4>Agent：解释断点</h4><p class="muted">对照操作、版本和已采集检查点，寻找最早的异常线索。记录没出现，也可能是采集或传输失败，需要继续核对。</p></article></div>
+<h3>这些问题，适合先看事件记录</h3>
+<ul class="checklist"><li>真实事件顺序与回调次数。</li><li>热重载后仍在执行旧构建的问题。</li><li>重复绑定、重复提交和重复结算。</li><li>写入成功但没有重新读取或渲染。</li><li>刷新、滑动消息、切换对话后生命周期断裂。</li><li>偶发问题发生前的最近一段可回放证据。</li></ul>
+<div class="callout"><strong>它看不到所有东西</strong>没有主动采集的局部变量、闭包和调用栈不会自动出现在事件流里。需要查看某一行执行时的精确内存状态时，切换到 VS Code 或浏览器调试器。</div>
+</section>
+
+<section class="section" id="mock-receiver">
+<div class="section-head"><div class="section-no">39</div><div><h2>建立一个本机调试接收器</h2><p class="section-kicker">示例使用 Node.js 内置模块，接收来自指定来源的调试请求。</p></div></div>
+<div class="callout warn"><strong>先按项目调整，再使用示例</strong>这是帮助理解流程的最小接收器。请 Agent 先检查构建与重载方式、可用事件和数据范围，再确定端口、检查点、记录字段与清理办法。它没有完整的日志轮转、请求限流或重试机制，不宜原样作为长期运行服务。</div>
+<p>示例文件名为 <code>debug/mock-listener.mjs</code>，放置位置先遵守项目的测试目录约定，启动命令也相应调整。完成调试后清理临时设施，保留需要的脱敏证据；调试文件不要进入正式包。</p>
+<div class="code-block"><div class="code-label"><span>debug/mock-listener.mjs</span><button class="copy-btn" type="button">复制</button></div><pre><code>import { createServer } from 'node:http';
+import { appendFile } from 'node:fs/promises';
+
+const HOST = '127.0.0.1';
+const PORT = 17373;
+const ALLOWED_ORIGIN = process.env.TW_DEBUG_ORIGIN;
+const DEBUG_KEY = process.env.TW_DEBUG_KEY;
+const OUTPUT = new URL('./tw-debug.ndjson', import.meta.url);
+
+if (!ALLOWED_ORIGIN || !DEBUG_KEY) {
+  throw new Error('请先设置 TW_DEBUG_ORIGIN 和 TW_DEBUG_KEY');
+}
+
+function setCors(req, res) {
+  if (req.headers.origin !== ALLOWED_ORIGIN) return false;
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-TW-Debug-Key');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Vary', 'Origin');
+  return true;
+}
+
+function reply(res, status, data) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.end(JSON.stringify(data));
+}
+
+const server = createServer(async (req, res) =&gt; {
+  if (!setCors(req, res)) {
+    reply(res, 403, { ok: false, error: 'origin_not_allowed' });
+    return;
+  }
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  if (req.method !== 'POST' || req.url !== '/events') {
+    reply(res, 404, { ok: false, error: 'not_found' });
+    return;
+  }
+
+  if (req.headers['x-tw-debug-key'] !== DEBUG_KEY) {
+    reply(res, 401, { ok: false, error: 'invalid_debug_key' });
+    return;
+  }
+
+  try {
+    let raw = '';
+    for await (const chunk of req) {
+      raw += chunk;
+      if (Buffer.byteLength(raw) &gt; 64 * 1024) {
+        throw new Error('payload_too_large');
+      }
+    }
+
+    const payload = JSON.parse(raw);
+    const record = {
+      ...payload,
+      receivedAt: new Date().toISOString(),
+    };
+
+    await appendFile(OUTPUT, `${JSON.stringify(record)}\n`, 'utf8');
+    console.log(`${record.receivedAt}  ${record.event}`);
+    reply(res, 202, { ok: true });
+  } catch (error) {
+    reply(res, 400, { ok: false, error: String(error) });
+  }
+});
+
+server.listen(PORT, HOST, () =&gt; {
+  console.log(`TW mock listener: http://${HOST}:${PORT}/events`);
+  console.log(`output: ${OUTPUT.pathname}`);
+});</code></pre></div>
+<h3>启动前只设两个临时值</h3>
+<div class="code-block"><div class="code-label"><span>PowerShell · 只在当前终端会话有效</span><button class="copy-btn" type="button">复制</button></div><pre><code>$env:TW_DEBUG_ORIGIN='http://127.0.0.1:8000'
+$env:TW_DEBUG_KEY='换成只用于本次调试的随机字符串'
+node .\debug\mock-listener.mjs</code></pre></div>
+<p>来源要与浏览器实际发出的 Origin 请求头一致，酒馆端口与接收器端口也要分别核对。iframe 中的 <code>location.origin</code> 可作线索；若请求头确为 <code>null</code>，才将 <code>TW_DEBUG_ORIGIN</code> 配成字符串 <code>null</code>。接收器仍只监听本机，不要改成 <code>0.0.0.0</code>。</p>
+<div class="callout danger"><strong>本机调试也要有边界</strong>仅绑定 <code>127.0.0.1</code>、使用一次性口令、限制 64 KB 请求，并且不要记录聊天全文、Cookie、API Key、扩展私密设置或完整变量表。</div>
+</section>
+
+<section class="section" id="tavern-probe">
+<div class="section-head"><div class="section-no">40</div><div><h2>在酒馆里加入临时 Probe</h2><p class="section-kicker">选择需要监听的事件，确认发送哪些字段，并检查停用后的清理。</p></div></div>
+<p>下面代码运行在<strong>酒馆助手脚本 iframe</strong>，依赖酒馆助手提供的 <code>eventOn</code>、<code>tavern_events</code>、<code>iframe_events</code>、<code>getTavernVersion</code> 与 <code>getTavernHelperVersion</code>。事件名和返回的 <code>stop()</code> 以 TavernWeave 随附的声明参考为依据，目标实例仍需现场确认版本。</p>
+<div class="code-block"><div class="code-label"><span>本地调试脚本 · 不要打包进角色卡</span><button class="copy-btn" type="button">复制</button></div><pre><code>const CONFIG = Object.freeze({
+  endpoint: 'http://127.0.0.1:17373/events',
+  debugKey: '与 TW_DEBUG_KEY 相同的一次性口令',
+  buildRevision: '换成当前构建标记',
+});
+
+window.__TW_DEBUG_PROBE__?.stop?.();
+
+const sessionId =
+  globalThis.crypto?.randomUUID?.() ??
+  `tw-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+const subscriptions = [];
+const runtime = {
+  tavern: getTavernVersion(),
+  helper: getTavernHelperVersion(),
+  buildRevision: CONFIG.buildRevision,
+  frame: typeof getIframeName === 'function' ? getIframeName() : 'unknown',
+};
+
+function brief(value, depth = 0, seen = new WeakSet()) {
+  if (value == null || typeof value === 'number' || typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    return { type: 'string', length: value.length };
+  }
+  if (typeof value !== 'object') {
+    return { type: typeof value };
+  }
+  if (seen.has(value)) return '[circular]';
+  if (depth &gt;= 2) return Array.isArray(value) ? '[array]' : '[object]';
+
+  seen.add(value);
+  if (Array.isArray(value)) {
+    return value.slice(0, 8).map(item =&gt; brief(item, depth + 1, seen));
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .slice(0, 12)
+      .map(([key, item]) =&gt; [key, brief(item, depth + 1, seen)]),
+  );
+}
+
+async function publish(event, args = []) {
+  const response = await fetch(CONFIG.endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-TW-Debug-Key': CONFIG.debugKey,
+    },
+    body: JSON.stringify({
+      sourceAt: new Date().toISOString(),
+      sessionId,
+      event,
+      args: args.map(arg =&gt; brief(arg)),
+      runtime,
+    }),
+  });
+
+  if (!response.ok) {
+    console.warn('[TW debug probe] receiver rejected event', response.status);
+  }
+}
+
+function listen(eventType) {
+  const subscription = eventOn(eventType, (...args) =&gt; {
+    void publish(eventType, args).catch(error =&gt; {
+      console.warn('[TW debug probe] publish failed', error);
+    });
+  });
+  subscriptions.push(subscription);
+}
+
+[
+  tavern_events.CHAT_CHANGED,
+  tavern_events.MESSAGE_SENT,
+  tavern_events.MESSAGE_RECEIVED,
+  tavern_events.MESSAGE_UPDATED,
+  tavern_events.GENERATION_STARTED,
+  tavern_events.GENERATION_ENDED,
+  iframe_events.MESSAGE_IFRAME_RENDER_ENDED,
+].forEach(listen);
+
+window.__TW_DEBUG_PROBE__ = {
+  mark(label, data = {}) {
+    return publish(`mock:${label}`, [data]);
+  },
+  stop() {
+    subscriptions.splice(0).forEach(subscription =&gt; subscription.stop());
+    delete window.__TW_DEBUG_PROBE__;
+  },
+};
+
+void publish('probe:ready', [{ origin: location.origin }]);</code></pre></div>
+<h3>在关键操作处增加临时检查点</h3>
+<p>宿主事件未必覆盖你自己的购买、扣款和渲染过程。可以在调试分支中增加少量检查点。下面示例要求业务代码与 Probe 能访问同一个实例；如果分属不同 iframe，需要先明确通信方式，不能假设各自的 window 相通。</p>
+<div class="code-block"><div class="code-label"><span>示例 · 购买按钮的调试检查点</span><button class="copy-btn" type="button">复制</button></div><pre><code>await window.__TW_DEBUG_PROBE__?.mark('purchase:start', {
+  itemId,
+});
+
+await updatePurchaseState();
+await window.__TW_DEBUG_PROBE__?.mark('purchase:state-written', {
+  itemId,
+});
+
+renderShop();
+await window.__TW_DEBUG_PROBE__?.mark('purchase:rendered', {
+  itemId,
+});</code></pre></div>
+<div class="callout warn"><strong>摘要也需要检查内容</strong>上面的函数会缩短字符串和对象，但仍可能保留字段名、数字等信息，使用前要按数据白名单检查。检查点还会增加请求耗时；结束后移除 Probe、口令和临时检查点，再用正式产物重走相同路径。</div>
+</section>
+
+<section class="section" id="agent-debug-loop">
+<div class="section-head"><div class="section-no">41</div><div><h2>让 Agent 从事件记录里缩小故障范围</h2><p class="section-kicker">每次只复现一个动作，把对应记录和代码连起来看。</p></div></div>
+<div class="steps"><div class="step"><strong>记录运行边界</strong>确认 SillyTavern、酒馆助手、卡片和构建标记，记录当前对话、视口与复现动作。</div><div class="step"><strong>保留旧证据，标记本轮起点</strong>按记录时间和实例区分本轮测试，再点击一个按钮、切换一次聊天或触发一次生成，避免混入多个操作。</div><div class="step"><strong>按时间与 sessionId 分组</strong>先找 <code>probe:ready</code> 和构建标记，再寻找入口、写入、渲染与宿主事件。</div><div class="step"><strong>先查最早异常的位置</strong>入口之后没有写入记录，先查业务条件、异常和采集是否正常；写入后没有渲染记录，再查刷新流程。定位后按已授权范围修改。</div><div class="step"><strong>确认新构建确实加载</strong>检查新的 <code>probe:ready</code>、构建标记与目标 iframe；示例标记需要手动更新，不能只改标记就当作新源码已运行。标记不一致时，先排查产物和加载路径。</div><div class="step"><strong>重复同一动作做回归</strong>核对预期次数、关联记录和控制台，再检查刷新与聊天切换。并发请求的到达或写入顺序未必等于业务执行顺序，不能只按日志行号下结论。</div></div>
+<div class="table-wrap"><table><thead><tr><th>事件流</th><th>更可能的根因</th></tr></thead><tbody><tr><td>没有 <code>probe:ready</code></td><td>调试脚本未加载、接收端来源/口令不匹配，或请求被宿主策略阻止</td></tr><tr><td>有 <code>purchase:start</code>，没有 <code>purchase:state-written</code></td><td>条件检查、异步调用或数据写入阶段失败</td></tr><tr><td>有 <code>state-written</code>，没有 <code>rendered</code></td><td>刷新函数未调用、提前返回或渲染抛错</td></tr><tr><td>同一 session 内检查点重复两次</td><td>监听器重复注册、按钮重复绑定或提交没有锁</td></tr><tr><td>源码已修改，但构建标记没变</td><td>编译失败、监听器断开或 iframe 仍在运行上一次成功产物</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-label"><span>交给 Agent 的调试任务模板</span><button class="copy-btn" type="button">复制</button></div><pre><code>请为当前 SillyTavern 项目建立“真实实例 + 本机 Mock 监听”的调试链。
+
+边界：
+1. 真实酒馆仍是唯一验收环境，不创建伪酒馆替代它；
+2. 接收端只绑定 127.0.0.1，使用一次性口令；
+3. 不记录聊天全文、完整变量、Cookie、API Key 或私密设置；
+4. 调试文件放在 debug/，不得进入正式打包；
+5. 修改源码前先复现一次，并保存事件顺序和当前构建标记；
+6. 每次只定位“最早缺失或重复的检查点”；
+7. 修复后确认新构建已加载，再重复同一动作；
+8. 最终删除 Probe 和临时检查点，用正式产物完成刷新、切换对话、
+   重复点击和控制台回归。
+
+请输出：
+- 运行边界；
+- 最小复现；
+- 事件时间线；
+- 根因所在层；
+- 修改文件；
+- 修复后的同路径证据；
+- 尚未完成的真实运行验收。</code></pre></div>
+</section>
+
+<section class="section" id="vscode-listener">
+<div class="section-head"><div class="section-no">42</div><div><h2>用 VS Code 断点查看当时的变量</h2><p class="section-kicker">事件记录帮你找到可疑位置，断点让你暂停在那里，查看调用栈和局部变量。</p></div></div>
+<p>VS Code 提供 Edge 与 Chrome 的浏览器调试功能。可以从命令面板运行 <strong>Debug: Open Link</strong>；要附加到专用浏览器实例，则先启用其远程调试端口，再用 <code>launch.json</code> 连接。下面是需要按本机路径、端口调整的示例。</p>
+<div class="code-block"><div class="code-label"><span>以调试模式启动独立 Edge 实例</span><button class="copy-btn" type="button">复制</button></div><pre><code>msedge.exe --remote-debugging-port=9222 --user-data-dir=tw-debug-profile</code></pre></div>
+<div class="code-block"><div class="code-label"><span>.vscode/launch.json</span><button class="copy-btn" type="button">复制</button></div><pre><code>{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "msedge",
+      "request": "attach",
+      "name": "Attach SillyTavern",
+      "port": 9222,
+      "url": "http://127.0.0.1:8000/",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}</code></pre></div>
+<p class="small muted">使用 Chrome 时把 <code>msedge</code> 改为 <code>chrome</code>。端口和酒馆 URL 必须与实际环境一致。方案与字段可参考 <a href="https://code.visualstudio.com/docs/nodejs/browser-debugging" rel="noreferrer" target="_blank">VS Code 官方浏览器调试文档</a>。</p>
+<h3>断点命中后，可以检查什么</h3>
+<ul class="checklist"><li>断点命中时的调用栈、局部变量、闭包和当前表达式。</li><li>逐行执行、条件断点与 Logpoint。</li><li>异常到底从哪一行抛出。</li><li>Source Map 正确时，从构建产物映射回 TypeScript 或原始模块。</li><li>某个回调为什么进入了错误分支，以及精确的输入值。</li></ul>
+<div class="callout warn"><strong>iframe 和构建产物会影响断点效果</strong>酒馆助手脚本可能运行在动态 iframe、生成代码或重编译产物中。Source Map 缺失、脚本 URL 变化或 iframe 被替换时，原断点可能变灰或失效；需要在新脚本出现后重新确认断点绑定。</div>
+</section>
+
+<section class="section" id="debug-compare">
+<div class="section-head"><div class="section-no">43</div><div><h2>事件记录与断点调试，怎样搭配</h2><p class="section-kicker">先用记录追查发生了什么，需要查看某一步的精确状态时再用断点。</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>比较维度</th><th>Agent Mock 监听</th><th>VS Code 附加调试</th></tr></thead><tbody><tr><td>连接方式</td><td>酒馆侧 Probe 通过 HTTP 把选定事件发到本机接收端</td><td>通过浏览器远程调试协议附加到 Edge 或 Chrome</td></tr><tr><td>主要证据</td><td>时间线、事件次数、参数摘要、构建标记、自定义业务检查点</td><td>断点、调用栈、Scope、局部变量、闭包、异常与 Source Map</td></tr><tr><td>对执行时序的影响</td><td>通常不暂停主线程，但序列化、请求和等待检查点仍会影响耗时与时序</td><td>断点会暂停执行，可能改变竞态和超时表现；Logpoint 影响较小</td></tr><tr><td>历史保留</td><td>示例追加写入 NDJSON，可保存前后记录并交给 Agent 分析；日志保留与轮转需另行约定</td><td>更偏向当前暂停现场；需要另行保存 Debug Console 或诊断记录</td></tr><tr><td>自动化程度</td><td>Agent 可以持续读取、聚类、生成事件断言并重复回归</td><td>通常由人决定断点和逐步操作，Agent 可辅助但依赖调试器控制能力</td></tr><tr><td>可见范围</td><td>只能看到主动上报的事件和序列化摘要</td><td>断点命中时能看到精确内存状态和代码路径</td></tr><tr><td>典型盲区</td><td>未埋点的分支、未序列化的闭包、精确调用栈</td><td>断点之外已经过去的完整事件历史，以及断点导致的时序扰动</td></tr><tr><td>最适合</td><td>生命周期、重复监听、热重载、跨对话、写入—刷新链和回归证据</td><td>精确异常、复杂计算、错误分支、闭包状态和单行级根因</td></tr></tbody></table></div>
+<h3>同一个故障，两种工具分别看什么</h3>
+<div class="table-wrap"><table><thead><tr><th>故障</th><th>Agent Mock 的效果</th><th>VS Code 的效果</th></tr></thead><tbody><tr><td>点击一次购买两次</td><td>业务检查点连续出现两组，能快速确认“重复执行”及发生时间</td><td>在处理函数断点可看到两个调用栈，继续追查是谁重复绑定</td></tr><tr><td>写入后 UI 不刷新</td><td><code>state-written</code> 存在而 <code>rendered</code> 缺失，快速锁定刷新层</td><td>在刷新调用处单步执行，查看提前返回条件或 DOM 异常</td></tr><tr><td>偶尔切换对话后失效</td><td>保留多次 <code>CHAT_CHANGED</code> 前后的长时间事件序列，更容易看生命周期</td><td>若能稳定复现，可在切换回调中检查当时的对象和订阅状态</td></tr><tr><td>某个公式算错</td><td>只能看到输入输出摘要，除非额外增加安全检查点</td><td>直接检查每一步局部变量，通常更有效</td></tr></tbody></table></div>
+<div class="callout good"><strong>按缺少的证据选工具</strong>不知道哪次操作开始出问题，先看事件记录；已经锁定某个回调，却不知道为何走进错误分支，再用断点。两种工具可以配合，也不必每次都全套上场。</div>
+</section>
+
+<section class="section" id="combined-debug">
+<div class="section-head"><div class="section-no">44</div><div><h2>联合调试：定位、修复，再验证</h2><p class="section-kicker">保留失败记录，找到原因，修复后重走同一条路径，最后移除调试设施复验。</p></div></div>
+<div class="flow"><div class="flow-node">保存失败基线</div><div class="flow-arrow">→</div><div class="flow-node">Mock 找最早断点</div><div class="flow-arrow">→</div><div class="flow-node">VS Code 查精确状态</div><div class="flow-arrow">→</div><div class="flow-node">修改与重编译</div><div class="flow-arrow">→</div><div class="flow-node">同路径事件回归</div><div class="flow-arrow">→</div><div class="flow-node">移除调试设施</div></div>
+<h3>一次完整调试可以这样安排</h3>
+<ol><li>记录版本、卡片、构建标记、对话、视口和最小复现。</li><li>启动本机 Receiver，确认 Probe 上报 <code>probe:ready</code>。</li><li>只执行一个用户动作，让 Agent 读取失败时间线。</li><li>在最早缺失或重复的业务层增加一个短期检查点。</li><li>若问题已缩小到具体函数，用 VS Code 断点检查调用栈与局部变量。</li><li>修改维护源码，等待构建成功和监听触发 iframe 重载。</li><li>确认新的 <code>buildRevision</code> 已接管，再重复完全相同的动作。</li><li>测试刷新、重复点击、切换对话、消息编辑或滑动等相关生命周期。</li><li>删除 Probe、口令、接收器和临时检查点，重新构建正式产物。</li><li>用正式产物做最后一轮真实 SillyTavern 验收。</li></ol>
+<h3>交付时，把已验证与待验收内容列清楚</h3>
+<ul class="checklist"><li>失败基线与修复后事件流来自同一个复现动作。</li><li>修复后构建标记已变化，且目标 iframe 确实重新加载。</li><li>预期检查点顺序完整，每个动作只执行一次。</li><li>控制台没有新增的因果错误或未处理 Promise。</li><li>真实数据重新读取后仍然正确，不是只改了 DOM。</li><li>刷新和切换对话后没有丢失行为或产生重复监听。</li><li>桌面与手机视口都能完成关键交互。</li><li>正式产物中不包含调试口令、Probe 或用户运行数据。</li></ul>
+<div class="callout danger"><strong>最后还要检查正常使用的版本</strong>调试记录支持定位和回归。移除调试设施后，仍需把待验收构建导入或绑定到真实 SillyTavern，确认功能正常。哪些步骤由 Agent 完成、哪些面和点需要你检查，都应明确列出。</div>
+</section>
+
+<section class="section" id="chapter-4-summary">
+<div class="section-head"><div class="section-no">45</div><div><h2>第四章回顾：让修复结论有据可查</h2><p class="section-kicker">能复现问题、解释原因，并在正常使用环境里确认修复，这一轮调试才算交代清楚。</p></div></div>
+<div class="cards"><article class="card"><div class="card-icon">流</div><h4>Agent Mock</h4><p class="muted">保存受控事件流，适合生命周期、重复执行、热重载和跨操作因果链。</p></article><article class="card"><div class="card-icon">断</div><h4>VS Code</h4><p class="muted">停在精确代码现场，查看调用栈、局部变量、闭包、分支和异常。</p></article><article class="card"><div class="card-icon">验</div><h4>真实验收</h4><p class="muted">移除所有调试设施后，以正式构建在真实酒馆中的表现作为最终结论。</p></article></div>
+<div class="callout good"><strong>把这次排查留成下次能用的经验</strong>记录触发条件、根因和有效的检查步骤。下一次类似问题出现，你和 Agent 就有具体线索可查，不用重新猜一遍。</div>
+<ul class="checklist"><li>不要用假页面代替真实 SillyTavern。</li><li>不要让调试接收端对局域网或公网开放。</li><li>不要把聊天全文、变量全集和密钥写进事件流。</li><li>不要在旧构建上验证新源码。</li><li>不要让断点暂停造成的时序变化冒充真实结果。</li><li>不要把 Probe、一次性口令和临时检查点带进发布包。</li></ul>
+</section>

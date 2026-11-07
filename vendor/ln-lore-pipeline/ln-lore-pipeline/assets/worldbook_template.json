@@ -1,0 +1,44 @@
+{
+  "name": "角色专属世界书_角色名",
+  "description": "《作品名》角色「角色名」专属世界书：事实档案＋原文台词库。挂载于角色名角色卡。",
+  "metadata": {},
+  "entries": [
+    {
+      "uid": 0,
+      "key": ["角色名", "别名1", "别名2"],
+      "keys": ["角色名", "别名1", "别名2"],
+      "content": "【角色名｜① 核心元数据（卡外）】\n全名：……（旧译异写：……，来源查库后统一）\n自称：……；身份：……\n防串线：本书记＝……（全名/职名）≠……（另一角色，全名）≠……（另一角色，全名）——三人共名只能靠全名/职名区分。\n<!-- 触发逻辑：命中本角主名/称号/别名时注入核心元数据与防串线护栏 -->",
+      "extensions": {"position": 4, "depth": 4, "prevent_recursion": true, "display_index": 0,
+        "probability": 100, "useProbability": true, "selectiveLogic": 0, "scan_depth": 2,
+        "case_sensitive": false, "match_whole_words": false},
+      "position": 4,
+      "depth": 4,
+      "prevent_recursion": true
+    },
+    {
+      "uid": 1,
+      "key": ["关系人A", "关系人B"],
+      "keys": ["关系人A", "关系人B"],
+      "content": "【角色名｜② 关系·羁绊（触发＝关系人名）】\n- 关系人A——关系定性（一行一证：L123）。\n- 关系人B——关系定性（L456）。\n<!-- 触发逻辑：任一关系人名命中即注入；剧透等级：低 -->",
+      "extensions": {"position": 4, "depth": 4, "prevent_recursion": true, "display_index": 1},
+      "position": 4, "depth": 4, "prevent_recursion": true
+    },
+    {
+      "uid": 3,
+      "key": ["终局关键词（收窄为结构性特异性词）"],
+      "keys": ["终局关键词（收窄为结构性特异性词）"],
+      "disable": true,
+      "content": "<!--【手动条目】剧情推进至第X章（终局）后手动启用-->\n【角色名｜③' 终局锚点（手动）】\n- 终局事件……（L号）。\n<!-- 触发逻辑：手动启用后命中即注入；剧透等级：高 -->",
+      "extensions": {"position": 4, "depth": 4, "prevent_recursion": true, "display_index": 3, "disable": true},
+      "position": 4, "depth": 4, "prevent_recursion": true, "disable": true
+    },
+    {
+      "uid": 6,
+      "key": ["台词触发词（口癖/名场面词）"],
+      "keys": ["台词触发词（口癖/名场面词）"],
+      "content": "【角色名｜⑦ 台词·XX主题（N条）】\n> 台词为「」原文逐字·话号可回溯；说话者＝角色名本人（无编造、无他人台词冒充）。\n- 〔第N章 第M话 L123〕「……」\n- 〔第N章 L456〕「……」\n<!-- 触发逻辑：……词命中即注入；剧透等级：低 -->",
+      "extensions": {"position": 4, "depth": 4, "prevent_recursion": true, "display_index": 6},
+      "position": 4, "depth": 4, "prevent_recursion": true
+    }
+  ]
+}

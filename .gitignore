@@ -1,0 +1,11 @@
+# 忽略系统与编辑器垃圾
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+
+# 本地跑脚本产生的中间产物
+__pycache__/
+*.pyc
+输出/
+*.log

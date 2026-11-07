@@ -1,0 +1,28 @@
+# Character Card Skills
+
+> Chinese-language agent skills for writing and revising SillyTavern and BrainDance/taberna character cards and world books (lorebooks), with local JSON queries and read-only structural audits.
+
+Canonical repository: https://github.com/Marco0431/character-card-skills
+
+The main skill covers character behavior, opening scenes, world books, state, memory, and validation for campus and other settings. The world-book skill is a SillyTavern-oriented entry point that shares the main skill's references. Both skill directories are installed together. Python tools use the standard library and read user-specified local JSON files up to 8 MiB; they do not modify inputs, make network requests, or execute card contents. Static checks do not validate platform imports, runtime triggers, or long conversations.
+
+## Start here
+
+- [README](https://github.com/Marco0431/character-card-skills/blob/main/README.md): Installation, usage prompts, CLI examples, and a minimal world-book sample.
+- [Main character-card skill](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/SKILL.md): Authoring and revision workflow, supported tasks, and execution boundaries.
+- [SillyTavern world-book skill](https://github.com/Marco0431/character-card-skills/blob/main/skills/world-book-skill/SKILL.md): World-book editing guidance and read-only query entry point.
+- [Security and privacy scope](https://github.com/Marco0431/character-card-skills/blob/main/SECURITY.md): Tool behavior, input limits, removed executable content, and validation limitations.
+
+## Authoring references
+
+- [Writing workflow](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/writing-guide.md): Character-card authoring process.
+- [Characters and openings](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/character-card-guide.md): Character design and opening scenes.
+- [SillyTavern configuration](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/config-guide.md): World-book configuration, triggers, and budgets.
+- [State and memory](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/state-and-memory-guide.md): State, relationships, and conversation continuity.
+- [Taberna format](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/taberna-format-guide.md): Format, migration guidance, and tool boundaries.
+- [Validation](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/references/validation-guide.md): Structure, consistency, scenario checks, and platform testing.
+
+## Local tools
+
+- [Card audit](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/scripts/card-audit.py): Read-only structural audit for supported card and world-book JSON wrappers.
+- [World-book query](https://github.com/Marco0431/character-card-skills/blob/main/skills/campus-card-skill/scripts/query.py): Overview, UID lookup, text search, and reference lookup within the same JSON file.

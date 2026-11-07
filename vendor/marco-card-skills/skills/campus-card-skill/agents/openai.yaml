@@ -1,0 +1,4 @@
+interface:
+  display_name: "角色卡创作与维护"
+  short_description: "面向 ST 与 BrainDance 的角色行为、世界书、互动机制和交付验证"
+  default_prompt: "使用 $campus-card-skill，结合项目现有设定与跨卡经验，完成角色卡创作或定点改进并验证交付。"

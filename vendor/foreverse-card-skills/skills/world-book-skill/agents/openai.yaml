@@ -1,0 +1,4 @@
+interface:
+  display_name: "ST 角色卡与世界书"
+  short_description: "维护 SillyTavern 角色卡与世界书，复用统一写卡准则与静态审计流程"
+  default_prompt: "使用 $world-book-skill，根据现有内容源维护 SillyTavern 角色卡或世界书，并验证导出。"

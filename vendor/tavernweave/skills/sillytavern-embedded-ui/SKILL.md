@@ -1,0 +1,261 @@
+---
+name: sillytavern-embedded-ui
+description: Design, implement, or review framework-neutral embedded interfaces for SillyTavern rolecards, including message content pages, opening pages, MVU status bars, control centers, drawers, and popups. Use for creative visual design, message-to-page protocols, state-to-display mapping, HTML/CSS/JavaScript, interaction states, responsive behavior, accessibility, safe rendering, optional project-specific frontend sandboxes using real source, and the real-runtime handoff. Do not use as the primary skill to close behavior in a live SillyTavern instance; hand that work to sillytavern-runtime-debug.
+---
+
+# SillyTavern Embedded UI
+
+<!-- tw-guidance-entry:begin -->
+## Shared communication
+
+Apply [TW plain-language and guidance rules](../consult-tavernweave-library/references/communication-and-guidance.md): explain terms on first use, keep the user-selected 新人/入门/熟练/老手 level, and still explain needed changes and bugs at every level. Soul and prose modes never disable this baseline.
+<!-- tw-guidance-entry:end -->
+
+<!-- tw-plugin-runtime-entry:begin -->
+## Plugin runtime
+
+When this Skill runs through a plugin, cloud host, or remote machine, read [the plugin execution contract](../consult-tavernweave-library/references/plugin-runtime.md) at entry and apply its host, tool, and persistence checks before host-specific commands. Keep this Skill's scope, authorization, and acceptance gates.
+<!-- tw-plugin-runtime-entry:end -->
+
+Before designing or changing an embedded interface, use `$consult-tavernweave-library` with the `sillytavern-embedded-ui` route. Read A0, the smallest matching UI/mobile guides, and selected design/motion references; every selection remains `proposed` until the project authority adopts it.
+
+Apply the shared [frontend design quality standard](../consult-tavernweave-library/references/frontend-design-quality.md) as the default design requirement. Actively search and inspect relevant web designs, develop a distinctive solution from the author's intent, and express the layout visually. Awwwards-level quality is the direction; clean composition and useful copy are requirements, not optional gallery inspiration. Avoid decorative microcopy and redundant English captions while preserving the author's language and real functional labels. Use the shared reference for the complete workflow and evidence limits.
+
+Build the smallest maintainable interface that fits the rolecard's actual lifecycle. Use semantic HTML, CSS, and JavaScript as the portable baseline. Adopt a framework only when the existing project already uses it or the interaction complexity clearly justifies it.
+
+Develop the proposal yourself instead of requiring the author to fill out a technical questionnaire. One coherent design is enough; do not manufacture choices or reopen approved decisions. Continue authorized work, asking only about an unresolved material choice. Optional worksheets record the Agent's work and may be replaced by equivalent project records.
+
+## Own the implementation boundary
+
+This skill covers embedded-UI design, source implementation or review, supporting validation, and the acceptance criteria handed to runtime testing. Do not operate a live SillyTavern session or claim runtime acceptance under this skill.
+
+When behavior must be reproduced or accepted in the target runtime, hand the exact built artifact and the relevant checklist to `sillytavern-runtime-debug`. If that runtime pass finds a UI source defect, resume implementation here, rebuild, and return the new artifact revision to complete runtime acceptance.
+
+## Identify the surface
+
+Choose the surface before designing components:
+
+| Surface | Primary job | Lifecycle |
+| --- | --- | --- |
+| Message content page | Present message-derived content such as a letter, journal or forum | Follows the intended message and its rendering lifecycle |
+| Opening page | Present the greeting or support opening selection/setup | Follows the greeting; a setup wizard ends after its successful commit |
+| Status bar / HUD | Show frequently read game state near messages | Recreated or refreshed with message/runtime lifecycle |
+| Control center | Manage settings, packages, world data, and advanced actions | Usually long-lived and singleton |
+| Popup / drawer / modal | Focus one detail or decision without losing surrounding state | Temporary, with explicit open and close behavior |
+
+Do not turn a small set of alternate greetings into an application, or make a status bar carry control-center workflows.
+
+For a message-derived page, read [message content pages](references/message-content-ui.md) and use its [optional worksheet](assets/templates/message-content-ui.md) when helpful. For an MVU read-only display, read [MVU status-bar design](references/mvu-statusbar-design.md) and its [optional worksheet](assets/templates/mvu-statusbar-design.md). The branches share the quality standard but keep their content authorities separate. A mixed surface must declare the source of each displayed fact; it does not automatically require a new card type or state system.
+
+## Inspect before designing
+
+Read the existing HTML, CSS, JavaScript, data schema, regex/mount path, and runtime ownership. Record:
+
+- where the UI is rendered: message body, Tavern Helper frame, nested frame, or host document;
+- the trusted code boundary and all untrusted user/model/remote values;
+- the state source and scope: draft, local UI settings, chat, message floor, worldbook, or MVU `stat_data`;
+- lifecycle events that recreate the DOM;
+- existing design tokens, selectors, and component patterns worth reusing;
+- the smallest desktop and mobile containers the UI must support.
+
+Review structure and state flow before polishing color or decoration.
+
+## Keep state ownership explicit
+
+Separate these concerns:
+
+```text
+data state       persisted game or configuration data
+draft state      reversible, unconfirmed user input
+UI state         active tab, open panel, focus, scroll, and transient errors
+derived view     formatted values, counts, progress, and summaries
+```
+
+Do not persist tabs, accordions, or scroll positions into worldbooks or MVU unless they are intentionally part of gameplay. Do not write formal game variables on every draft edit. Preserve user-controlled view state across data refreshes when practical.
+
+Use one builder for any content that appears in preview, validation, and final submission. Avoid parallel templates that can drift.
+
+## Structure and styling
+
+- Use semantic controls: real `button`, `input`, `select`, `textarea`, headings, lists, and dialogs where supported.
+- Namespace IDs, storage keys, custom events, CSS variables, and classes per card or feature.
+- Use stable `data-*` attributes for JavaScript bindings. Treat decorative classes as styling, not the business protocol.
+- Prefer a small token layer for background, text, border, accent, spacing, radius, and type scale.
+- Use `box-sizing: border-box`, `min-width: 0` on shrinking flex/grid children, and predictable internal scroll regions.
+- Use fluid grids such as `repeat(auto-fit, minmax(...))`, wrapping controls, and `min()`/`max()`/`clamp()` constraints.
+- Avoid fixed widths that exceed a narrow message container. Avoid `100vh` as the only height strategy on mobile.
+- In an iframe, reason from the iframe or component container, not the host window. Use container measurements when the effective width is ambiguous.
+- Keep operational surfaces dense but organized. Reserve hero-scale typography and spectacle for true opening moments.
+- Avoid nested card borders and excessive blur. Provide a non-blur fallback when using `backdrop-filter`.
+
+## Render defensive data
+
+Treat all user, model, package, and remote content as untrusted.
+
+- Prefer `textContent` and DOM construction for text values.
+- If HTML is genuinely required, sanitize it with the trusted runtime sanitizer before insertion and do not mutate the sanitized string afterward.
+- Escape all values interpolated into HTML attributes. Validate URL protocols and origins.
+- Do not insert model output with `innerHTML`.
+- Normalize unexpected `null`, arrays, objects, long strings, missing fields, and unknown enum values.
+- Clamp progress values and sizes; provide fallback labels and colors.
+- Let long CJK and unbroken text wrap, collapse, or scroll intentionally.
+- Show malformed or unsupported data as a diagnostic state rather than silently hiding it.
+
+For remote UI, prefer declarative HTML plus a trusted local binder. Enforce HTTPS or a trusted local source, timeout, size limit, integrity or release pinning, protocol version, required-node validation, and sanitization. Reject remote scripts, nested frames, base URL changes, and automatic forms unless a separately reviewed design requires them.
+
+## Lifecycle and integration
+
+- Initialize through the runtime's actual readiness path, not only `DOMContentLoaded`.
+- Make binding idempotent. A compatible existing instance should be reused; an incompatible instance should be destroyed before replacement.
+- Keep a single cleanup path for event disposers, observers, timers, fetch abort controllers, temporary DOM, body scroll locks, and shared globals.
+- Capability-check parent-document access and wrap cross-frame access in `try/catch`.
+- Wait for optional integrations such as MVU before reading their events or data.
+- Read the intended message floor or persistence scope explicitly.
+- Debounce event-driven refreshes and prevent concurrent renders.
+- Prefer event delegation for dynamic lists. Avoid inline handlers that depend on module-scoped functions.
+- Preserve unrelated user data and re-read after writes.
+
+SillyTavern may namespace classes in static message HTML. Dynamic DOM added later may not receive the same transformation. Verify raw class tokens and computed styles in the real runtime; do not infer correctness from an offline preview.
+
+## Use real-time compilation during implementation
+
+When the user requests real-time editing, keep source implementation here and use
+`sillytavern-card-pipeline` to discover and run the target project's existing watcher.
+Do not invent a universal `watch` command, port, local server, or output mapping.
+
+Before editing, record the maintained source, the exact development output consumed by
+the card, and the current successful build marker. After each edit:
+
+1. wait for a successful rebuild and stop on compiler errors;
+2. hand the new output identity to `sillytavern-runtime-debug`;
+3. verify that Tavern Helper reloaded the intended message or script iframe, or use the
+   project's declared manual refresh/rebind fallback when live listening is unavailable;
+4. inspect the resulting DOM, console, interaction, and data state before continuing.
+
+A connected listener does not prove the newest source compiled, and a successful watch
+build does not prove SillyTavern loaded it. Keep both receipts. Use the live loop to
+shorten implementation feedback, then run the production build and hand its exact
+artifact to the final runtime acceptance pass.
+
+## Optional frontend sandbox before packaging
+
+When the author wants to polish an embedded UI, offer the local frontend sandbox as an optional working loop, especially before packaging. It can expose layout, interaction, state, and cross-module problems while changes are still cheap. An author may skip it; skipping is not a failed gate and never blocks the normal build and real-runtime path. Time saved and bugs found vary by project; do not promise a fixed reduction in runtime passes.
+
+TavernWeave supplies specifications and working methods for this loop. Build a project-specific sandbox from the author's maintained sources in the agreed test workspace, reusing the project's preview service and development stack. Do not introduce a generic TW workbench, demo application, or adoption landing page. Reuse an existing adopt/skip decision; a request to build the sandbox already supplies adoption. If skipped, create no sandbox and continue the existing workflow.
+
+Read [sandbox workflow](references/sandbox-workflow.md) for scope, implementation steps and evidence boundaries; [integration contract](references/adapter-contract.md) for state, events and UI parameters; and [scenario recipes](references/sandbox-recipes.md) when selecting single-module or joint checks. These are implementation requirements, not APIs of a shipped runtime. Adapt names and layout to the project. The optional [repository user guide](https://github.com/LiarMTTT/TavernWeave/blob/main/docs/frontend-sandbox.md) provides a ready-to-use request; the bundled references above remain sufficient for an offline skills-only installation.
+
+Load the complete maintained component source through the project's minimal host adapter and list every selected module with its actual source path, revision, and SHA-256. If a supplied hash is marked `unverified`, report it as unverified rather than treating it as an integrity check. Preserve the required iframe/blob hierarchy and API window locations. Full simulation covers all modules, entries and capabilities in the agreed scope; separately show loaded, not connected, unsupported and untested items. Use one module for a focused pass or mount related modules together when shared state or events matter. A screenshot of a replacement mock cannot establish source fidelity.
+
+Keep game data separate from temporary UI settings. Show the data source, batch, target chat/floor, before/after difference and expected events; require explicit confirmation bound to that batch, scope and state revision before injection. Confirm initial presets and complete scenario sequences too; an approved sequence needs no repeated approval for each internal step. Cancel without writes; invalidate approval on target or revision changes. Compare the actual committed state with each module's observed fields. UI sliders and exact inputs preview immediately within the adopted scope; provide baseline comparison, reset, presets and parameter export. Do not resize the user's viewport during manual tuning. Remove temporary overrides after backporting selected changes and rerun the same scene from maintained source. Export the scenario record and remaining host gaps, then hand the exact built artifact to `sillytavern-runtime-debug`. Sandbox checks never set `driverAccepted` or replace real host, device, model, and human visual evidence.
+
+Use synthetic mechanism examples in public documentation. Keep private card source, original chats, player data and local evidence in the project's test workspace, outside the public repository and release.
+
+## Opening pages
+
+Treat `first_mes` as a real assistant message that participates in context, swipes, edits, branches, export, macros, regexes, and rendering.
+
+A page may itself fulfill the greeting's presentation role under the builder's
+[opening contract](../tavern-card-builder/references/opening-strategies.md#3-custom-opening-pages).
+For a fixed scene or choice page, check its content and entry into play. Rendering
+the page does not by itself authorize a state write or message send. Preserve the
+usable `first_mes` or selected `alternate_greetings` path and verify what reaches
+the model separately from what is rendered for the player.
+
+Prefer native greeting branches for a few fixed openings. Apply the following
+transaction rules when implementing a custom setup wizard:
+
+- Keep the visible mount small and keep large UI markup out of model context.
+- Isolate drafts by stable chat identity; validate and migrate stored drafts.
+- Make preview read-only. Show the final player message and every persistent effect.
+- Freeze the chat/draft context at confirmation and recheck it before writes and send.
+- Snapshot mutable targets, make retry idempotent, and put irreversible actions last.
+- Use the normal SillyTavern send path so a real user message and a real assistant reply are created.
+- Preserve existing input text and leave the message available for manual send if automation fails.
+- Mark the opening committed only after the real user message is confirmed.
+- Exit the opening workflow after success; subsequent play returns to the normal multi-message flow.
+
+## Status bars and HUDs
+
+- Turn the player's reading task into a field-to-display mapping using [MVU status-bar design](references/mvu-statusbar-design.md) when MVU supplies the state. Reuse the current schema and resolve missing structure upstream; do not create variables to fill a layout.
+- Optimize for repeated scanning, not spectacle.
+- Show useful loading, empty, unavailable, malformed-data, and stale states.
+- Centralize variable paths and formatting. Never scatter schema paths through component code.
+- Read `stat_data` from the intended floor and refresh from documented events.
+- Keep filters, tabs, and mode switches quick to understand.
+- Collapse, wrap, truncate with an accessible full-value affordance, or scroll long values intentionally.
+- Preserve the active tab, scroll position, expanded sections, and user-selected map/view state across data refreshes.
+- Prevent duplicate frames or mounts after swipe, edit, or rerender.
+- Use a signature or focused update to avoid rerendering unchanged sections, but provide a deliberate forced refresh after user actions.
+- Distinguish valid zero and `false` from missing, null or invalid data according to the field contract. Read-only refresh and local view controls must not initialize or repair game state.
+
+## Control centers
+
+- Keep the main status and primary actions visible; do not bury them under settings.
+- Separate entry control, shell geometry, content rendering, and data operations.
+- Make the panel singleton and restore its entry after chat or host UI rebuilds.
+- Isolate section render failures so one malformed field does not blank the whole panel.
+- Explain offline, unauthenticated, dependency-missing, partial-success, and retry states.
+- Preview worldbook, package, identity, or variable mutations before committing them.
+- Do not use a control center as a hidden second source of truth for an opening-page transaction.
+
+## Popups, drawers, and modals
+
+- Mount overlays in a layer that is not clipped by an ancestor's `overflow`, `transform`, or filter. In non-framework code, a dedicated overlay root under the accessible document body is the equivalent of a portal.
+- If host-document access is unavailable, use an in-panel absolute overlay with a deliberate scroll strategy.
+- Constrain width and height to the actual container and provide an internal scrolling body.
+- Move focus into the surface, keep focus within a true modal when appropriate, close with Escape, and return focus to the opener.
+- Give the backdrop and close button unambiguous behavior; do not make destructive actions easy to dismiss accidentally.
+- Preserve and restore any body scroll or cursor changes.
+- Test nested confirmation flows, long content, the mobile keyboard, and reduced-height viewports.
+
+## Accessibility gate
+
+- Maintain logical heading order and DOM reading order.
+- Give every control an accessible name and every field a visible label.
+- Expose active tabs, expanded sections, selected values, busy state, and validation errors through appropriate ARIA state.
+- Use `aria-live` for asynchronous status or errors when necessary.
+- Keep keyboard navigation complete and focus visibly styled.
+- Do not communicate state by color alone.
+- Target touch controls around 44 by 44 CSS pixels where space permits.
+- Respect `prefers-reduced-motion`; avoid essential information that exists only during animation.
+- Check text contrast, 200% zoom/reflow, long CJK text, and screen-reader-friendly error association.
+
+## Prepare the runtime handoff
+
+Static linting, unit tests, and offline previews are supporting checks. Use them to prepare an implementation candidate, then hand the built artifact to `sillytavern-runtime-debug` for real-SillyTavern execution evidence and acceptance closure. Do not mark runtime cases as passed here unless citing a separate runtime-debug report for the same artifact revision.
+
+Select the relevant runtime cases and include them in the handoff:
+
+| Area | Runtime-debug evidence requested |
+| --- | --- |
+| Rendering | Fresh chat, each opening swipe, message edit, rerender, reload, and chat switch |
+| States | Loading, empty, long data, malformed data, missing dependency, network failure, retry, and partial success |
+| Interaction | Pointer, keyboard, focus return, repeated click, cancel, close, and input preservation |
+| Layout | Wide desktop, narrow message container, approximately 320px width, short viewport, zoom, and mobile keyboard |
+| Style | Computed display, size, overflow, stacking, transformed class names, dark/light context, and reduced motion |
+| Data | Correct scope/floor, event refresh, persistence after reread, no unrelated mutation, and no duplicate commit |
+| Security | User/model text remains inert; remote markup cannot execute business logic; no secrets appear in DOM or logs |
+
+For message content pages, select protocol cases from [message content pages](references/message-content-ui.md), including preserved surrounding prose and incomplete content where applicable. For MVU displays, select field and collection cases from [MVU status-bar design](references/mvu-statusbar-design.md), including read-only refresh. Regex fixtures alone do not establish parser or visual behavior. Keep these checks within the actual change instead of creating an unrelated demo application.
+
+For a frontend greeting, verify its actual message/branch carrier, visible content,
+entry into play and model-visible information. Select interaction cases for the
+controls it actually provides. A custom setup wizard additionally needs draft
+editing, refresh/restore, preview, confirmation, a real player message and a real
+assistant reply without duplicate submission. Verify variable initialization when
+the adopted state system requires it.
+For a HUD or control center, request swipe/edit/chat-switch lifecycle checks and
+actual computed-style inspection.
+
+## Deliverable
+
+Report:
+
+- the selected surface and state ownership;
+- inspected design references, the visual proposal, and any unverified quality evidence;
+- the smallest implementation or review findings;
+- security and accessibility decisions;
+- supporting checks and desktop or narrow-layout evidence;
+- the exact built artifact identity and selected runtime handoff cases;
+- known device, account, extension, or driver blockers for `sillytavern-runtime-debug`.

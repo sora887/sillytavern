@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "adapterVersion": "2.4.0",
+  "hosts": {
+    "codex": {
+      "displayName": "Codex",
+      "instructionFileName": "AGENTS.md",
+      "defaultDirectory": ".codex",
+      "homeOverrideEnvironment": "CODEX_HOME",
+      "rediscovery": "new-task-or-restart",
+      "support": "formal"
+    },
+    "claude": {
+      "displayName": "Claude Code",
+      "instructionFileName": "CLAUDE.md",
+      "defaultDirectory": ".claude",
+      "homeOverrideEnvironment": "CLAUDE_CONFIG_DIR",
+      "rediscovery": "new-task-or-restart",
+      "support": "formal",
+      "pluginFrontDoorMechanism": "plugin-session-start-hook",
+      "pluginFrontDoorDedup": "instruction-file-block-wins",
+      "presetAgent": "tavernweave-agent-skills:tavernweave"
+    },
+    "antigravity": {
+      "displayName": "Antigravity",
+      "instructionFileName": null,
+      "defaultDirectory": ".gemini/config/plugins",
+      "clientInstructionFileName": "AGENTS.md",
+      "clientInstructionDirectory": ".gemini",
+      "homeOverrideEnvironment": null,
+      "rediscovery": "new-session",
+      "support": "plugin-bundle",
+      "frontDoorMechanism": "plugin-always-on-rule",
+      "pluginPackage": "tavernweave-agent-skills",
+      "presetId": "tavernweave"
+    },
+    "dsh": {
+      "displayName": "DeepSeek Harness",
+      "instructionFileName": null,
+      "defaultDirectory": null,
+      "homeOverrideEnvironment": null,
+      "rediscovery": "new-session",
+      "support": "plugin-bundle",
+      "frontDoorMechanism": "plugin-system-prompt",
+      "pluginPackage": "liarmttt-tavernweave-dsh",
+      "presetId": "tavernweave"
+    }
+  }
+}

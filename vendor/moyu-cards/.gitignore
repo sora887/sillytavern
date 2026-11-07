@@ -1,0 +1,8 @@
+# WorkBuddy 会话数据（不入库）
+.workbuddy/
+
+node_modules/
+Thumbs.db
+
+# forge 混合斜杠 --output 的错误解析产物（调用 forge 时 --output 必须用统一正斜杠绝对路径）
+UsersWallsAppDataLocalTemp/
