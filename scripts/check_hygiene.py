@@ -119,8 +119,14 @@ def check_entries(rep, entries):
             rep.add(WARN, f"条目[{nm}]", "initvar 条目处于启用状态",
                     "初始变量条目应 disable=true，否则会被当正文读入")
         if "initvar" in low and INITVAR_HINT.search(content[:4000]):
-            rep.add(WARN, f"条目[{nm}]", "疑似非法 JSON/YAML（空值或缺逗号）",
-                    "导入前用解析器验证一遍，坏 JSON 会导致变量初始化失败")
+            try:
+                json.loads(content)
+                ok_json = True
+            except Exception:
+                ok_json = False
+            if not ok_json:
+                rep.add(WARN, f"条目[{nm}]", "疑似非法 JSON/YAML（空值或缺逗号）",
+                        "导入前用解析器验证一遍，坏 JSON 会导致变量初始化失败")
 
         # 4. 测试残留
         if TEST_MARK.search(nm) or TEST_MARK.search(content[:120]):
@@ -131,7 +137,7 @@ def check_entries(rep, entries):
             const_chars += len(content)
             if keys:
                 rep.add(INFO, f"条目[{nm}]", "const=true 但仍写了 keys", "keys 此时只是注释，不参与触发")
-            if not enabled:
+            if not enabled and "initvar" not in low:
                 rep.add(WARN, f"条目[{nm}]", "const=true 但被禁用", "确认这是有意关闭的模块")
         if not enabled:
             disabled += 1

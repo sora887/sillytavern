@@ -76,6 +76,8 @@ python scripts/apply_cover_text.py                    # 封面文字（唯一需
 - 禁用条目没写启用条件（当成模块池时）
 - 常驻预算按**字数**统计（条数口径会骗人），超过 60% 会警告
 
+`[initvar]` 条目有豁免：它本来就该禁用，内容也会先按 JSON 解析验证，不像别的条目那样只靠正则粗判。这避免了变量卡被误报。
+
 ```bash
 python scripts/check_hygiene.py 卡.json
 # 结果：[错误] 0 项，[警告] 1 项，[信息] 9 项
