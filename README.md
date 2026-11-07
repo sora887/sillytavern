@@ -16,7 +16,6 @@ references/
   60-quality.md           49 行硬伤清单 · 反 AI 味 · 十维审查
 scripts/                  打包 / 检查 / 拆包 / 查重 / 封面文字
 vendor/                   九个上游仓库原文镜像（30 MB，一字未改）
-examples/                 成品卡示例：苏茧 · 补衣
 ```
 
 ## 安装
@@ -64,10 +63,6 @@ python scripts/apply_cover_text.py                    # 封面文字（唯一需
 ```
 
 打包脚本主体只用标准库；只有封面文字脚本需要 `pip install pillow`。
-
-## 示例卡
-
-`examples/苏茧-补衣.json` — 纯文本卡，12 条世界书（1 条常驻 + 2 条深度触发），`check_card.py` 错误 0 项。设计说明见同目录 md，里面有命题、信息分工表、技术选型和验收记录。
 
 ## 来源
 
