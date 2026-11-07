@@ -18,6 +18,7 @@ metadata:
 
 1. **先读 `references/00-routes.md`** —— 它判定本次走哪条路线（新建卡 / 世界书优先 / 存量改造 / 局部变体），并列出四道闸门。**跳过它直接开写是最常见的失败方式。**
 2. 按路线只读需要的那几篇：
+   - `references/15-card-archetypes.md` —— **判型**：设定集 / 长篇剧情 / 系统面板 / 角色互动，四类原型的字段取舍与位置分工
    - `references/10-worldbook.md` —— 世界书分条、触发、位置、泄底门控
    - `references/20-character.md` —— 人设：调色盘路线 vs 人物生境路线
    - `references/30-opening.md` —— 开场白的形式、钩子、正反改写对照
@@ -25,7 +26,7 @@ metadata:
    - `references/50-format.md` —— v2 JSON / v3 PNG 字段表、编译与拆包
    - `references/60-quality.md` —— 硬伤清单、反 AI 味、审查流程
 3. 需要**原始依据**时读 `vendor/<repo>/...`（九个仓库完整镜像，一字未改）。`references/` 里每条规则都能在 `vendor/` 找到出处。
-4. 要**落地成文件**时用 `scripts/`：`build_card.py`（project→完备卡）、`check_card.py`（硬伤检查）、`extract_card.py`（拆包）、`scan_duplicates.py`（查重）。依赖 Python 3 + Pillow。
+4. 要**落地成文件**时用 `scripts/`：`build_card.py`（project→完备卡）、`check_card.py`（硬伤检查）、`check_hygiene.py`（数据卫生：关键词写坏、空条目、测试残留、常驻预算）、`extract_card.py`（拆包）、`scan_duplicates.py`（查重）。依赖 Python 3 + Pillow。
 
 ## 四条红线
 

@@ -2,19 +2,20 @@
 
 一个把「写 SillyTavern 角色卡」变成有流程、有闸门、有验收的工程活技能包。
 
-合并了九个开源写卡技能包的方法论，去重后写成 7 份可执行参考；上游原文全量留档，每条规则都能反查到出处。
+合并了九个开源写卡技能包的方法论，再用五张成熟卡做实测校准，去重后写成 8 份可执行参考；上游原文全量留档，每条规则都能反查到出处。
 
 ```
 SKILL.md                  入口：路线判定 + 四条红线 + 审美基准
 references/
   00-routes.md            任务路由 + 四道闸门
+  15-card-archetypes.md   判型：设定集 / 长篇剧情 / 系统面板 / 角色互动
   10-worldbook.md         世界书：分条粒度 / 双递归 / position 两派 / 泄底门控
   20-character.md         人设：调色盘路线 vs 人物生境路线（互斥）
   30-opening.md           开场白：形式分类 / 钩子 / 5 组正反改写
   40-mvu-regex-ejs.md     MVU 变量 / 正则闸门 / EJS / 状态栏
   50-format.md            v2 JSON / v3 PNG 字段表 · 编译与拆包
   60-quality.md           49 行硬伤清单 · 反 AI 味 · 十维审查
-scripts/                  打包 / 检查 / 拆包 / 查重 / 封面文字
+scripts/                  打包 / 硬伤检查 / 数据卫生 / 拆包 / 查重 / 封面文字
 vendor/                   九个上游仓库原文镜像（30 MB，一字未改）
 ```
 
@@ -55,14 +56,44 @@ SPEC → CARD-PENDING → CARD-BUILT → CHECK-PASSED → USER-APPROVED
 ## 工具
 
 ```bash
-python scripts/build_card.py   <项目目录>            # project → 完备卡 JSON/PNG
-python scripts/check_card.py   <卡.json>             # 30+ 条硬伤检查
-python scripts/extract_card.py <卡.json|卡.png>      # 拆包成可编辑项目
+python scripts/build_card.py    <项目目录>            # project → 完备卡 JSON/PNG
+python scripts/check_card.py    <卡.json>             # 30+ 条硬伤检查
+python scripts/check_hygiene.py <卡.json|项目目录>    # 数据卫生检查（见下）
+python scripts/extract_card.py  <卡.json|卡.png>      # 拆包成可编辑项目
 python scripts/scan_duplicates.py <项目目录>          # 条目级查重
 python scripts/apply_cover_text.py                    # 封面文字（唯一需要 Pillow）
 ```
 
 打包脚本主体只用标准库；只有封面文字脚本需要 `pip install pillow`。
+
+### 数据卫生检查
+
+「能导入」不等于「数据干净」。五张成熟卡里每一张都有能跑但白写的条目，`check_hygiene.py` 专查这类问题：
+
+- 关键词里用全角逗号/空格 → 整串当一个词，永远触发不到
+- `content` 为空的条目、残留的测试条目
+- `[initvar]` 没禁用、或 JSON 写坏了（空值、缺逗号）
+- 禁用条目没写启用条件（当成模块池时）
+- 常驻预算按**字数**统计（条数口径会骗人），超过 60% 会警告
+
+```bash
+python scripts/check_hygiene.py 卡.json
+# 结果：[错误] 0 项，[警告] 1 项，[信息] 9 项
+```
+
+退出码 0/1，可以直接接进脚本。
+
+## 实测校准（2026-11-07）
+
+拿五张成熟卡（设定集 / 长篇剧情 / 系统面板 / 角色互动四种形态）逐项对照后，修掉了三条与事实不符的默认值：
+
+| 原写法 | 实测 | 现在 |
+|---|---|---|
+| `personality` / `scenario` / `mes_example` 要写满 | 5/5 张卡**全为空**，语气靠世界书文风条 + 开场白 | 默认留空 |
+| `description` 留空是「有条件成立」 | 字数最大的两张卡 `description` **完全为空** | 默认留空，写满是特例 |
+| `prevent_recursion` 是**无条件**铁律 | 2/5 张卡全关，2/5 全开 | 默认开，三种例外可关（全常驻 / 链式召回 / 纯格式条目） |
+
+同时把「开场白只有 4 字」这类现象写进 `30-opening.md`：`first_mes` 可以是占位符 + 渲染正则 + alternate 存正文，**字数不是质量指标**。
 
 ## 来源
 
